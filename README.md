@@ -4,8 +4,8 @@
 <p align="center">
 <img src="assets/banner-rock-paper-scissors.png" width="100%">
 </p>
-```
-[![License:
+
+![License:
 MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 ![HTML](https://img.shields.io/badge/HTML5-orange?logo=html5)
 ![CSS](https://img.shields.io/badge/CSS3-blue?logo=css3)
