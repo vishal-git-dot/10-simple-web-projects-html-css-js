@@ -1,10 +1,8 @@
 # 🚀 10 - Simple Web Projects: **Rock Paper Scissors** (HTML, CSS, JavaScript)
 
-```{=html}
+
 <p align="center">
-```
-`<img src="assets/banner-rock-paper-scissors.png" width="100%">`{=html}
-```{=html}
+<img src="assets/banner-rock-paper-scissors.png" width="100%">
 </p>
 ```
 [![License:
