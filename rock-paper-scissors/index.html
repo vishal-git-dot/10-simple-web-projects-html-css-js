@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rock • Paper • Scissors</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="bg-blobs" aria-hidden="true"></div>
+
+    <header class="topbar" id="header">
+      <div class="brand">
+        <h1>Rock • Paper • Scissors</h1>
+        <p>Play vs Computer</p>
+      </div>
+
+      <div class="top-actions">
+        <button class="btn ghost" id="themeBtn" type="button" aria-pressed="false" title="Toggle theme">
+          <span class="btn-ic" aria-hidden="true">🌗</span>
+          <span class="btn-txt">Theme</span>
+        </button>
+
+        <button class="btn danger" id="resetBtn" type="button" title="Reset scores">
+          <span class="btn-ic" aria-hidden="true">↺</span>
+          <span class="btn-txt">Reset</span>
+        </button>
+
+        <button class="btn" id="settingsBtn" type="button" title="Game settings">
+          <span class="btn-ic" aria-hidden="true">⚙</span>
+          <span class="btn-txt">Settings</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <!-- ARENA -->
+      <section class="arena card" id="arena" aria-label="Game arena">
+        <div class="panel" id="playerPanel" data-side="player">
+          <div class="panel-top">
+            <span class="tag">You</span>
+            <span class="pill" id="playerStatus">Ready</span>
+          </div>
+
+          <div class="icon-slot" aria-live="polite">
+            <div class="big-icon" id="playerIcon" aria-hidden="true">—</div>
+            <div class="choice-name" id="playerChoiceText">Pick a move</div>
+          </div>
+        </div>
+
+        <div class="vs">
+          <div class="vs-badge" aria-hidden="true">VS</div>
+          <div class="vs-text" id="roundStatus" aria-live="polite">Choose Rock, Paper, or Scissors</div>
+        </div>
+
+        <div class="panel" id="computerPanel" data-side="computer">
+          <div class="panel-top">
+            <span class="tag">Computer</span>
+            <span class="pill" id="computerStatus">Waiting</span>
+          </div>
+
+          <div class="icon-slot" aria-live="polite">
+            <div class="big-icon" id="computerIcon" aria-hidden="true">—</div>
+            <div class="choice-name" id="computerChoiceText">…</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CONTROLS -->
+      <section class="controls" id="controls" aria-label="Choice controls">
+        <button class="choice" data-choice="rock" type="button" aria-label="Choose Rock">
+          <span class="choice-ic" aria-hidden="true">
+            <!-- Inline-ish icon using SVG-like simple shape vibe -->
+            ✊
+          </span>
+          <span class="choice-txt">Rock</span>
+          <span class="kbd" aria-hidden="true">R</span>
+        </button>
+
+        <button class="choice" data-choice="paper" type="button" aria-label="Choose Paper">
+          <span class="choice-ic" aria-hidden="true">✋</span>
+          <span class="choice-txt">Paper</span>
+          <span class="kbd" aria-hidden="true">P</span>
+        </button>
+
+        <button class="choice" data-choice="scissors" type="button" aria-label="Choose Scissors">
+          <span class="choice-ic" aria-hidden="true">✌️</span>
+          <span class="choice-txt">Scissors</span>
+          <span class="kbd" aria-hidden="true">S</span>
+        </button>
+      </section>
+
+      <!-- SCOREBOARD -->
+      <section class="scoreboard card" id="scoreboard" aria-label="Scoreboard">
+        <div class="score-item">
+          <div class="label">You</div>
+          <div class="value" id="playerScore">0</div>
+        </div>
+        <div class="score-item">
+          <div class="label">Computer</div>
+          <div class="value" id="computerScore">0</div>
+        </div>
+        <div class="score-item">
+          <div class="label">Draws</div>
+          <div class="value" id="draws">0</div>
+        </div>
+        <div class="score-item">
+          <div class="label">Rounds</div>
+          <div class="value" id="roundsPlayed">0</div>
+        </div>
+        <div class="score-meta">
+          <span class="mini-pill" id="bestOfLabel">Best-of: Off</span>
+        </div>
+      </section>
+
+      <!-- RESULT -->
+      <section class="result card hidden" id="result" aria-label="Round result">
+        <div class="result-top">
+          <div class="result-title" id="resultTitle">—</div>
+          <div class="result-badge" id="resultBadge" aria-hidden="true">•</div>
+        </div>
+
+        <p class="result-sub" id="resultExplain">Make a move to start.</p>
+
+        <div class="recap">
+          <div class="recap-item">
+            <span class="recap-k">You:</span>
+            <span class="recap-v" id="recapPlayer">—</span>
+          </div>
+          <div class="recap-item">
+            <span class="recap-k">Computer:</span>
+            <span class="recap-v" id="recapComputer">—</span>
+          </div>
+        </div>
+
+        <div class="result-actions">
+          <button class="btn" id="playAgainBtn" type="button" title="Play again (Space)">
+            <span class="btn-ic" aria-hidden="true">⟲</span>
+            <span class="btn-txt">Play again</span>
+          </button>
+          <button class="btn ghost" id="clearHistoryBtn" type="button" title="Clear round history">
+            <span class="btn-ic" aria-hidden="true">🧹</span>
+            <span class="btn-txt">Clear history</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- HISTORY (optional, enabled by default) -->
+      <section class="history card" id="history" aria-label="Round history">
+        <div class="history-head">
+          <h2>Last 5 rounds</h2>
+          <span class="hint">Tip: R / P / S to play • Space = play again</span>
+        </div>
+        <ul class="history-list" id="historyList" aria-live="polite"></ul>
+      </section>
+    </main>
+
+    <!-- SETTINGS MODAL -->
+    <div class="modal-backdrop hidden" id="modalBackdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal card">
+        <div class="modal-head">
+          <h2 id="modalTitle">Settings</h2>
+          <button class="icon-btn" id="closeModalBtn" type="button" aria-label="Close settings">✕</button>
+        </div>
+
+        <div class="modal-body">
+          <div class="field">
+            <label class="field-label" for="bestOfSelect">Best-of (optional)</label>
+            <select id="bestOfSelect" class="select">
+              <option value="0">Off</option>
+              <option value="3">Best of 3</option>
+              <option value="5">Best of 5</option>
+              <option value="7">Best of 7</option>
+            </select>
+            <p class="field-help">First to <strong>ceil(bestOf/2)</strong> wins the match.</p>
+          </div>
+
+          <div class="field row">
+            <div>
+              <label class="field-label" for="historyToggle">Round history</label>
+              <p class="field-help">Show last 5 rounds with outcome badges.</p>
+            </div>
+            <button class="switch" id="historyToggle" type="button" aria-pressed="true">
+              <span class="knob" aria-hidden="true"></span>
+            </button>
+          </div>
+
+          <div class="field row">
+            <div>
+              <label class="field-label" for="scrollToggle">Smooth scroll to result</label>
+              <p class="field-help">Helpful on mobile after each round.</p>
+            </div>
+            <button class="switch" id="scrollToggle" type="button" aria-pressed="true">
+              <span class="knob" aria-hidden="true"></span>
+            </button>
+          </div>
+
+          <div class="field row">
+            <div>
+              <label class="field-label" for="soundToggle">Tiny click feedback</label>
+              <p class="field-help">No audio file—just subtle UI pulse.</p>
+            </div>
+            <button class="switch" id="soundToggle" type="button" aria-pressed="false">
+              <span class="knob" aria-hidden="true"></span>
+            </button>
+          </div>
+        </div>
+
+        <div class="modal-foot">
+          <button class="btn" id="saveSettingsBtn" type="button">Save</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- FINAL MODAL -->
+    <div class="modal-backdrop hidden" id="finalBackdrop" role="dialog" aria-modal="true" aria-labelledby="finalTitle">
+      <div class="modal card">
+        <div class="modal-head">
+          <h2 id="finalTitle">Match Complete</h2>
+          <button class="icon-btn" id="closeFinalBtn" type="button" aria-label="Close">✕</button>
+        </div>
+        <div class="modal-body">
+          <p class="final-msg" id="finalMsg">—</p>
+        </div>
+        <div class="modal-foot">
+          <button class="btn danger" id="restartMatchBtn" type="button">Restart match</button>
+          <button class="btn ghost" id="keepPlayingBtn" type="button">Keep playing</button>
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer" id="footer">
+      <p>
+        Shortcuts: <strong>R</strong> Rock • <strong>P</strong> Paper • <strong>S</strong> Scissors •
+        <strong>Space</strong> Play again • <strong>Esc</strong> Close modal
+      </p>
+      <p class="credits">Made with HTML/CSS/JS — no libraries.</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
